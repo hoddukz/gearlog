@@ -16,8 +16,11 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    console.error("[auth/callback] exchangeCodeForSession error:", error);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`);
   }
 
+  console.error("[auth/callback] no code in URL, params:", searchParams.toString());
   // 코드가 없거나 세션 교환 실패 시 로그인 페이지로
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+  return NextResponse.redirect(`${origin}/login?error=no_code`);
 }

@@ -49,7 +49,6 @@ export function VehicleForm({ onSuccess }: { onSuccess?: () => void }) {
 
       const vehicle = await res.json();
       addVehicle(vehicle);
-      e.currentTarget.reset();
       onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "등록 실패");
