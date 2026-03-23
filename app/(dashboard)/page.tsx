@@ -3,6 +3,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useVehicleStore } from "@/lib/store/vehicle-store";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,17 @@ const FUEL_LABEL: Record<string, string> = {
 export default function DashboardPage() {
   const selectedVehicle = useVehicleStore((s) => s.selectedVehicle());
   const vehicles = useVehicleStore((s) => s.vehicles);
+  const setVehicles = useVehicleStore((s) => s.setVehicles);
+
+  useEffect(() => {
+    fetch("/api/vehicles")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setVehicles(data);
+        }
+      });
+  }, [setVehicles]);
 
   return (
     <div className="mx-auto w-full max-w-screen-md px-4 py-6">
