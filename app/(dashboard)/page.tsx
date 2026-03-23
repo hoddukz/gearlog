@@ -78,14 +78,17 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* 기능 카드 (Phase 1 나머지 기능 자리) */}
+          {/* 기능 카드 */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <Link
+              href="/fuel"
+              className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-primary/40 transition-colors"
+            >
               <p className="text-sm font-medium text-card-foreground">
                 주유 기록
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">준비 중</p>
-            </div>
+              <p className="mt-1 text-xs text-primary">기록 보기</p>
+            </Link>
             <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
               <p className="text-sm font-medium text-card-foreground">
                 비용 현황
