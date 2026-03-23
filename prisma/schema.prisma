@@ -1,0 +1,149 @@
+// Tag: config
+// Path: /Users/hodduk/Documents/git/gearlog/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  directUrl = env("DIRECT_URL")
+  url       = env("DATABASE_URL")
+}
+
+// ==================== Enums ====================
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  HYBRID
+}
+
+enum MemoStatus {
+  PENDING
+  SCHEDULED
+  DONE
+}
+
+enum ExpenseCategory {
+  FUEL
+  MAINTENANCE
+  INSURANCE
+  TAX
+  OTHER
+}
+
+// ==================== Models ====================
+
+model Vehicle {
+  id             String   @id @default(cuid())
+  userId         String
+  name           String
+  year           Int
+  fuelType       FuelType
+  licensePlate   String?
+  currentMileage Int
+  purchasePrice  Int?
+  createdAt      DateTime @default(now())
+
+  fuelLogs         FuelLog[]
+  maintenanceLogs  MaintenanceLog[]
+  maintenanceMemos MaintenanceMemo[]
+  expenseLogs      ExpenseLog[]
+  reminders        Reminder[]
+  gasStations      GasStation[]
+
+  @@index([userId])
+}
+
+model FuelLog {
+  id          String   @id @default(cuid())
+  vehicleId   String
+  date        DateTime
+  mileage     Int
+  liters      Float
+  pricePerL   Float
+  totalCost   Float
+  stationName String?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
+
+model MaintenanceLog {
+  id        String   @id @default(cuid())
+  vehicleId String
+  date      DateTime
+  category  String
+  item      String
+  cost      Float
+  mileage   Int
+  shopName  String?
+  notes     String?
+  memoId    String?
+  createdAt DateTime @default(now())
+
+  vehicle Vehicle          @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  memo    MaintenanceMemo? @relation(fields: [memoId], references: [id])
+
+  @@index([vehicleId])
+}
+
+model MaintenanceMemo {
+  id          String     @id @default(cuid())
+  vehicleId   String
+  category    String
+  content     String
+  status      MemoStatus @default(PENDING)
+  linkedLogId String?
+  createdAt   DateTime   @default(now())
+
+  vehicle         Vehicle          @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  maintenanceLogs MaintenanceLog[]
+
+  @@index([vehicleId])
+}
+
+model ExpenseLog {
+  id        String          @id @default(cuid())
+  vehicleId String
+  category  ExpenseCategory
+  date      DateTime
+  amount    Float
+  notes     String?
+  createdAt DateTime        @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
+
+model Reminder {
+  id             String    @id @default(cuid())
+  vehicleId      String
+  type           String
+  triggerDate    DateTime?
+  triggerMileage Int?
+  isSent         Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
+
+model GasStation {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  name          String
+  lastPricePerL Float?
+  createdAt     DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
