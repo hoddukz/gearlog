@@ -22,6 +22,12 @@ export function DashboardHeader({ email }: { email: string }) {
         </div>
         <div className="flex items-center gap-3">
           <Link
+            href="/memos"
+            className="text-xs text-muted-foreground hover:text-foreground"
+          >
+            메모
+          </Link>
+          <Link
             href="/vehicles"
             className="text-xs text-muted-foreground hover:text-foreground"
           >
