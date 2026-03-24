@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { FuelForm } from "@/components/fuel/fuel-form";
 import { FuelList } from "@/components/fuel/fuel-list";
+import { FuelEfficiencyChart } from "@/components/fuel/fuel-efficiency-chart";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -42,6 +43,13 @@ export default function FuelPage() {
           />
         </div>
       )}
+
+      <div className="mb-6 rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <h2 className="mb-4 text-base font-medium text-card-foreground">
+          연비 추이
+        </h2>
+        <FuelEfficiencyChart refreshKey={refreshKey} />
+      </div>
 
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
         <h2 className="mb-4 text-base font-medium text-card-foreground">
