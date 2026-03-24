@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { ExpenseForm } from "@/components/expenses/expense-form";
 import { ExpenseSummary } from "@/components/expenses/expense-summary";
+import { CSVImport } from "@/components/expenses/csv-import";
 import { Button } from "@/components/ui/button";
 import { useVehicleStore } from "@/lib/store/vehicle-store";
 import Link from "next/link";
@@ -13,6 +14,7 @@ import Link from "next/link";
 export default function ExpensesPage() {
   const selectedVehicleId = useVehicleStore((s) => s.selectedVehicleId);
   const [showForm, setShowForm] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   function handleExport(type: string) {
@@ -80,6 +82,20 @@ export default function ExpensesPage() {
             전체 내보내기
           </Button>
         </div>
+        <div className="mt-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowImport(!showImport)}
+          >
+            {showImport ? "가져오기 닫기" : "CSV 가져오기"}
+          </Button>
+        </div>
+        {showImport && (
+          <div className="mt-4 border-t border-border pt-4">
+            <CSVImport onSuccess={() => setRefreshKey((k) => k + 1)} />
+          </div>
+        )}
       </div>
     </div>
   );
