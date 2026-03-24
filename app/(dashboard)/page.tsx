@@ -89,12 +89,15 @@ export default function DashboardPage() {
               </p>
               <p className="mt-1 text-xs text-primary">기록 보기</p>
             </Link>
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <Link
+              href="/maintenance"
+              className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-primary/40 transition-colors"
+            >
               <p className="text-sm font-medium text-card-foreground">
-                비용 현황
+                정비 이력
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">준비 중</p>
-            </div>
+              <p className="mt-1 text-xs text-primary">기록 보기</p>
+            </Link>
           </div>
         </div>
       ) : null}
