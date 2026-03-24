@@ -107,7 +107,6 @@ export function FuelForm({ onSuccess }: { onSuccess?: () => void }) {
       }
 
       // 폼 초기화
-      e.currentTarget.reset();
       setLiters("");
       setPricePerL("");
       setTotalCost("");
