@@ -19,6 +19,10 @@ type Summary = {
   maintenanceTotal: number;
   expenseTotal: number;
   categories: { name: string; amount: number }[];
+  purchasePrice: number;
+  totalCostOfOwnership: number;
+  costPerKm: number | null;
+  currentMileage: number;
 };
 
 const COLORS = [
@@ -109,6 +113,45 @@ export function ExpenseSummary({ refreshKey }: { refreshKey: number }) {
             </span>
           </div>
         ))}
+      </div>
+
+      {/* 총 소유비용 */}
+      <div className="mt-6 border-t border-border pt-4">
+        <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+          총 소유비용 (TCO)
+        </h3>
+        <div className="grid grid-cols-2 gap-3">
+          {summary.purchasePrice > 0 && (
+            <div>
+              <p className="text-xs text-muted-foreground">구매가</p>
+              <p className="text-sm font-medium text-foreground">
+                {summary.purchasePrice.toLocaleString()}원
+              </p>
+            </div>
+          )}
+          <div>
+            <p className="text-xs text-muted-foreground">누적 유지비</p>
+            <p className="text-sm font-medium text-foreground">
+              {summary.grandTotal.toLocaleString()}원
+            </p>
+          </div>
+          {summary.purchasePrice > 0 && (
+            <div>
+              <p className="text-xs text-muted-foreground">총 소유비용</p>
+              <p className="text-sm font-bold text-foreground">
+                {summary.totalCostOfOwnership.toLocaleString()}원
+              </p>
+            </div>
+          )}
+          {summary.costPerKm !== null && (
+            <div>
+              <p className="text-xs text-muted-foreground">km당 유지비</p>
+              <p className="text-sm font-medium text-foreground">
+                {summary.costPerKm.toLocaleString()}원/km
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

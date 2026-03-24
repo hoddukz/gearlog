@@ -73,11 +73,27 @@ export async function GET(request: NextRequest) {
     }),
   ].filter((c) => c.amount > 0);
 
+  // 총 소유비용 (구매가 + 누적 유지비)
+  const purchasePrice = vehicle.purchasePrice
+    ? vehicle.purchasePrice * 10000
+    : 0; // DB에 만원 단위로 저장됨
+  const totalCostOfOwnership = purchasePrice + grandTotal;
+
+  // km당 비용 (주행거리 > 0일 때)
+  const costPerKm =
+    vehicle.currentMileage > 0
+      ? Math.round(grandTotal / vehicle.currentMileage)
+      : null;
+
   return NextResponse.json({
     grandTotal,
     fuelTotal,
     maintenanceTotal,
     expenseTotal,
     categories,
+    purchasePrice,
+    totalCostOfOwnership,
+    costPerKm,
+    currentMileage: vehicle.currentMileage,
   });
 }
