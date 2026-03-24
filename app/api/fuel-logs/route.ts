@@ -33,12 +33,12 @@ export async function GET(request: NextRequest) {
 
   const logs = await prisma.fuelLog.findMany({
     where: { vehicleId },
-    orderBy: { date: "desc" },
+    orderBy: { mileage: "desc" },
   });
 
-  // 연비 계산: 이전 기록과의 주행거리 차이 / 주유량
+  // 연비 계산: 주행거리 기준 이전 기록과의 차이 / 주유량
   const logsWithEfficiency = logs.map((log, i) => {
-    const prevLog = logs[i + 1]; // desc 정렬이므로 i+1이 이전 기록
+    const prevLog = logs[i + 1]; // mileage desc 정렬이므로 i+1이 이전 기록
     let efficiency: number | null = null;
     if (prevLog && log.mileage > prevLog.mileage && log.liters > 0) {
       efficiency =
@@ -126,13 +126,14 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 연비 계산
+  // 연비 계산 — 주행거리 기준으로 이전 기록 조회 (같은 날짜 복수 주유 대응)
   const prevLog = await prisma.fuelLog.findFirst({
     where: {
       vehicleId,
-      date: { lt: new Date(date) },
+      id: { not: fuelLog.id },
+      mileage: { lt: mileageNum },
     },
-    orderBy: { date: "desc" },
+    orderBy: { mileage: "desc" },
   });
 
   let efficiency: number | null = null;

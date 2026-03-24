@@ -23,6 +23,7 @@ type VehicleStore = {
   selectVehicle: (id: string) => void;
   addVehicle: (vehicle: Vehicle) => void;
   selectedVehicle: () => Vehicle | undefined;
+  reset: () => void;
 };
 
 export const useVehicleStore = create<VehicleStore>()(
@@ -58,6 +59,8 @@ export const useVehicleStore = create<VehicleStore>()(
         const { vehicles, selectedVehicleId } = get();
         return vehicles.find((v) => v.id === selectedVehicleId);
       },
+
+      reset: () => set({ vehicles: [], selectedVehicleId: null }),
     }),
     {
       name: "gearlog-vehicle",
