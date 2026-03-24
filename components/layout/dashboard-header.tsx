@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { VehicleSelector } from "@/components/vehicles/vehicle-selector";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function DashboardHeader({ email }: { email: string }) {
   return (
@@ -36,6 +37,7 @@ export function DashboardHeader({ email }: { email: string }) {
           <span className="hidden text-xs text-muted-foreground sm:inline">
             {email}
           </span>
+          <ThemeToggle />
           <LogoutButton />
         </div>
       </div>
